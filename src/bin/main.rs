@@ -1,15 +1,21 @@
+use server::ThreadPool;
 use std::net::{TcpListener, TcpStream};
 use std::io::prelude::*;
 use std::fs;
+use std::thread;
+use std::time::Duration;
 
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0u8; 1024];
     stream.read(&mut buffer).unwrap();
 
-    let get = b"GET / HTTP/1.1";
-
+    let get = b"GET / HTTP/1.1\r\n";
+    let sleep = b"GET /sleep HTTP/1.1\r\n";
     let (status_line, filename) = 
         if buffer.starts_with(get) {
+            ("HTTP/1.1 200 OK", "index.html")
+        } else if buffer.starts_with(sleep) {
+            thread::sleep(Duration::from_secs(5));
             ("HTTP/1.1 200 OK", "index.html")
         } else {
             ("HTTP/1.1 404 NOT FOUND", "404.html")
@@ -28,9 +34,14 @@ fn handle_connection(mut stream: TcpStream) {
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:1234").unwrap();
+    let pool = ThreadPool::new(4);
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
-        handle_connection(stream);
+
+        pool.execute(|| {
+            println!("request!");
+            handle_connection(stream);
+        });
     }
 }
