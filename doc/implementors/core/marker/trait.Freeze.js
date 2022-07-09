@@ -1,0 +1,4 @@
+(function() {var implementors = {};
+implementors["ThreadPool"] = [{"text":"impl !Freeze for <a class=\"struct\" href=\"ThreadPool/struct.ThreadPool.html\" title=\"struct ThreadPool::ThreadPool\">ThreadPool</a>","synthetic":true,"types":["ThreadPool::ThreadPool"]}];
+implementors["lib"] = [{"text":"impl !Freeze for <a class=\"struct\" href=\"lib/struct.ThreadPool.html\" title=\"struct lib::ThreadPool\">ThreadPool</a>","synthetic":true,"types":["lib::ThreadPool"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
